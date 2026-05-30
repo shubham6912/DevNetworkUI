@@ -1,16 +1,30 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/constants';
 
 const Login = () => {
-    const [emailId , setEmailId] = useState();
-    const [password , setPassword] = useState();
+    const [emailId, setEmailId] = useState("shubhamg@gmail.com");
+    const [password, setPassword] = useState("Aca#c@12333312");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const handleLogin = async() =>{
-        const res = await axios.post("http://localhost:7777/login" , {
-            emailId : emailId,
-            password : password
-        });
-    }
+    const handleLogin = async () => {
+        try {
+            const res = await axios.post(BASE_URL+"/login", {
+                emailId: emailId,
+                password: password
+            }, { withCredentials: true });
+
+            console.log(res.data);
+            dispatch(addUser(res.data));
+            return navigate("/");
+        } catch (err) {
+            console.log(err)
+        }
+    };
 
     return (
         <div className="flex justify-center mt-10">
@@ -31,7 +45,7 @@ const Login = () => {
                                 value={emailId}
                                 className="input text-lg w-full"
                                 placeholder="Enter email"
-                                onChange={ (e) => setEmailId(e.target.value)}
+                                onChange={(e) => setEmailId(e.target.value)}
                             />
                         </fieldset>
 
@@ -44,14 +58,14 @@ const Login = () => {
                                 value={password}
                                 className="input text-lg w-full"
                                 placeholder="Enter password"
-                                onChange={ (e) => setPassword(e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </fieldset>
 
                     </div>
 
                     <div className="card-actions justify-center mt-6">
-                        <button className="btn btn-primary text-lg px-6">
+                        <button className="btn btn-primary text-lg px-6" onClick={handleLogin}>
                             Login
                         </button>
                     </div>
