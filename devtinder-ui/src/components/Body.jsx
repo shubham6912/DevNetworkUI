@@ -19,7 +19,7 @@ const Body = () => {
     if (userData) return;
 
     try {
-      console.log("PROFILE API")
+     
       const res = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true
       });
